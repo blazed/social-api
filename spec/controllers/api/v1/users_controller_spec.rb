@@ -1,0 +1,19 @@
+require 'rails_helper'
+
+RSpec.describe Api::V1::UsersController, type: :controller do
+
+  describe "GET #me" do
+    it "returns http success" do
+      get :me
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET #show" do
+    it "returns http success" do
+      get :show
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+end
