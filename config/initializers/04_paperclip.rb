@@ -13,7 +13,7 @@ PAPERCLIP_PHOTO_OPTIONS = {
   convert_options: {
     all: '-quality 75 -strip'
   },
-  default_url: "http://localhost:3000/assets/profile_:style.jpg",
+  default_url: "http://social.fakes3.exsules.com:4567/profile_:style.jpg",
 }
 
 PAPERCLIP_PHOTO_MAX_SIZE = 50.megabytes

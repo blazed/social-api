@@ -1,13 +1,26 @@
 class ApplicationController < ActionController::API
   include ActionController::Serialization
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+  before_action :authenticate_user_from_token!
 
   private
 
-  def current_resource_owner
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  def authenticate_user_from_token!
+    authenticate_with_http_token do |token, options|
+      user_email = options[:email].presence
+      user = user_email && User.find_by_email(user_email)
+
+      if user && Devise.secure_compare(user.auth_token, token)
+        request.env['devise.skip_trackable'] = true
+        sign_in user, store: false
+      end
+    end
   end
 
-  def current_user
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  protected
+
+  def authenticate_user!
+    render(json: { errors: "Could not authenticate you" }, status: 401) unless current_user
   end
+
 end

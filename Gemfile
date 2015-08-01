@@ -10,7 +10,6 @@ gem 'oj'
 gem 'oj_mimic_json'
 
 gem 'devise'
-gem 'doorkeeper'
 
 gem 'sidekiq'
 gem 'sinatra', require: nil
@@ -58,9 +57,11 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda', require: false
   gem 'rspec-given'
+  gem 'webmock', require: false
   gem 'spork'
   gem 'pry-nav'
   gem 'fakes3'
+  gem 'pry-byebug'
   gem 'byebug'
   gem 'web-console', '~> 2.1'
   gem 'spring'

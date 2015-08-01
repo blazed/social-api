@@ -3,10 +3,10 @@ module Helpers
     @next_seq = (@next_seq || 0) + 1
   end
 
-  def log_in(fabricator=nil)
-    user = Fabricate(fabricator || :user)
-    login_as_user(user)
-    user
+  def login(user)
+    #user = Fabricate(fabricator || :user)
+    puts user.username
+    $test_user = user
   end
 
   def login_user(fabricator=nil)

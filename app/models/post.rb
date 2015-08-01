@@ -27,9 +27,9 @@ class Post < ActiveRecord::Base
 
   after_commit :queue_gather_op_data, on: :create, if: :contains_open_graph_url_in_text?
 
-  #after_create :send_push_notification
-  after_create :update_pusher!
-  after_destroy :update_pusher!
+  #after_create :push_post
+  #after_create :update_pusher!
+  #after_destroy :update_pusher!
 
   def raw_text
     read_attribute(:text)
@@ -47,7 +47,7 @@ class Post < ActiveRecord::Base
     self.open_graph_url = self.urls[0]
   end
 
-  def update_pusher!
+  def push_post
     Pusher.trigger('posts', 'push', PostSerializer.new(self).to_json)
   end
 

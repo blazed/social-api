@@ -13,6 +13,7 @@
 #  last_sign_in_at         :datetime
 #  current_sign_in_ip      :inet
 #  last_sign_in_ip         :inet
+#  auth_token              :string           default(""), not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  first_name              :string
@@ -31,6 +32,7 @@
 #
 # Indexes
 #
+#  index_users_on_auth_token            (auth_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
@@ -40,6 +42,8 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+	#attr_accessor :login
 
   include Concerns::User::Friend
 
@@ -58,6 +62,7 @@ class User < ActiveRecord::Base
   validates_attachment_size :background, less_than: PAPERCLIP_BACKGROUND_MAX_SIZE
   validates_attachment_content_type :background, content_type: PAPERCLIP_BACKGROUND_CONTENT_TYPES
 
+  before_save :ensure_auth_token
   before_save :update_username_lower
   before_save :strip_downcase_email
 
@@ -88,6 +93,28 @@ class User < ActiveRecord::Base
     find_by(username_lower: username.downcase)
   end
 
+  #def self.find_for_database_authentication(warden_conditions)
+    #conditions = warden_conditions.dup
+    #if login = conditions.delete(:login)
+      #where(conditions.to_hash).where(["lower(username_lower) = :value OR lower(email) = :value", { :value => login.downcase  }]).first
+    #else
+      #where(conditions.to_hash).first
+    #end
+  #end
+
   private
+
+  def ensure_auth_token
+    if self.auth_token.blank?
+      self.auth_token = generate_auth_token
+    end
+  end
+
+  def generate_auth_token
+    loop do
+      token = Devise.friendly_token
+      break token unless User.exists?(auth_token: token)
+    end
+  end
 
 end

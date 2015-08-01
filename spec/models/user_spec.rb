@@ -13,6 +13,7 @@
 #  last_sign_in_at         :datetime
 #  current_sign_in_ip      :inet
 #  last_sign_in_ip         :inet
+#  auth_token              :string           default(""), not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  first_name              :string
@@ -31,6 +32,7 @@
 #
 # Indexes
 #
+#  index_users_on_auth_token            (auth_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
@@ -75,6 +77,12 @@ describe User do
         user.save
         expect(user.email).to eq('mail@example.com')
       end
+
+      it 'should strip email' do
+        user = Fabricate.build(:user, email: ' myemail@example.com ')
+        user.save
+        expect(user.email).to eq('myemail@example.com')
+      end
     end
 
     describe 'name' do
@@ -115,6 +123,22 @@ describe User do
         user = Fabricate.build(:user, username: 'MyUSerNAMe')
         user.save
         expect(user.username_lower).to eq('myusername')
+      end
+    end
+
+    describe 'create' do
+      subject { Fabricate.build(:user) }
+
+      it { should be_valid }
+
+      context 'after_save' do
+        before { subject.save }
+
+        it 'has auth token' do
+          expect(subject.auth_token).to be_present
+        end
+
+
       end
     end
   end

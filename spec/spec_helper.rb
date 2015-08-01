@@ -15,6 +15,7 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   #require 'rspec/autorun'
+  require 'webmock/rspec'
   require 'shoulda'
   require 'rake'
   require 'sidekiq/testing'

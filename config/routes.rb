@@ -5,12 +5,11 @@ Rails.application.routes.draw do
   mount PgHero::Engine, at: "pghero"
   mount Sidekiq::Web, at: "/sidekiq"
 
-  use_doorkeeper do
-    skip_controllers :applications, :authorizations, :authorized_applications
-  end
+  devise_for :users, controllers: { sessions: 'sessions' }, skip: [:passwords]
 
   namespace :api do
     namespace :v1 do
+
       get 'users/me' => 'users#me'
       get 'users' => 'users#index'
       get 'users/:username' => 'users#show', constraints: { username: USERNAME_FORMAT }
@@ -21,8 +20,14 @@ Rails.application.routes.draw do
 
       post 'friends' => 'friends#create'
 
+      # Password reset stuff
+      post 'password_reset' => 'users#start_password_reset'
+      put 'password_reset' => 'users#finish_password_reset'
+
     end
   end
+
+  get 'password_reset' => 'application#index', as: :edit_user_password
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
