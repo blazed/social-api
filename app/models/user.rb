@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
   has_attached_file :background, PAPERCLIP_BACKGROUND_OPTIONS
 
   validates :username, presence: true, length: { minimum: 3, maximum: 30 }, uniqueness: { case_sensitive: false }, format: { with: /\A[a-zA-Z0-9_.-]*\z/ }
+  validates_exclusion_of :username, in: Settings.social.users.username_blacklist
   validates :first_name, presence: true
   validates :last_name, presence: true
 

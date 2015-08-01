@@ -19,10 +19,10 @@ before_install:
   - source ~/.bashrc && ~/.rvm/scripts/rvm && rvm use $SHIPPABLE_RUBY
 
 before_script:
+  - bundle install --without development --jobs 3 --retry 3
+  - cp config/social.yml.example config/social.yml
   - cp config/database.yml.ci config/database.yml
   - 'RAILS_ENV=test bundle exec rake db:create db:migrate --trace'
-
-bundler_args: --without development --jobs 3 --retry 3
 
 script:
   - 'RAILS_ENV=test SIMPLECOV=true bundle exec rspec'

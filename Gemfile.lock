@@ -276,6 +276,7 @@ GEM
     seed-fu (2.3.5)
       activerecord (>= 3.1, < 4.3)
       activesupport (>= 3.1, < 4.3)
+    settingslogic (2.0.9)
     shellany (0.0.1)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -379,6 +380,7 @@ DEPENDENCIES
   rspec-given
   rspec-rails
   seed-fu
+  settingslogic
   shoulda
   sidekiq
   simplecov

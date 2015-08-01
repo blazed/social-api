@@ -31,6 +31,8 @@ gem 'twitter-text'
 
 gem 'kaminari'
 
+gem 'settingslogic'
+
 # Realtime
 gem 'pusher'
 

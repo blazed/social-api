@@ -34,6 +34,8 @@ Spork.prefork do
 
     config.infer_spec_type_from_file_location!
 
+    config.profile_examples = 10
+
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end
