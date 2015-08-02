@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
 
   include Concerns::User::Friend
 
-  has_many :posts, -> { order('updated_at DESC', 'created_at ASC') }
+  has_many :posts, dependent: :destroy
   has_many :notifications, foreign_key: :recipient_id
 
   has_attached_file :photo, PAPERCLIP_PHOTO_OPTIONS

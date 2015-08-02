@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::Serialization
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  #include ActionController::ImplicitRender
   before_action :authenticate_user_from_token!
 
   private

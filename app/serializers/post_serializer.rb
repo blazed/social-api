@@ -11,6 +11,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  open_graph_cache_id :integer
+#  from_user_id        :uuid
 #
 # Indexes
 #
@@ -18,7 +19,6 @@
 #
 
 class PostSerializer < ActiveModel::Serializer
-  embed :ids
   attributes :id,
              :author,
              :text,
@@ -30,12 +30,13 @@ class PostSerializer < ActiveModel::Serializer
              :updated_at,
              :photo,
              :user_id,
+             :from_user_id,
              :type
 
   #has_one :user
 
   def author
-    "#{object.user.first_name} #{object.user.last_name}"
+    "#{object.from.first_name} #{object.from.last_name}"
   end
 
   def user_id
@@ -43,11 +44,11 @@ class PostSerializer < ActiveModel::Serializer
   end
 
   def username
-    object.user.username
+    object.from.username_lower
   end
 
   def photo
-    object.user.photo.url('xsmall', false)
+    object.from.photo.url('xsmall', false)
   end
 
   def type

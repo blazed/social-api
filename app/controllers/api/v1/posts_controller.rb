@@ -14,7 +14,9 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def create
-    @post = current_user.posts.new(post_params)
+    user = User.find_by(id: params[:post][:username])
+    @post = user.posts.new(post_params)
+    @post.from = current_user
 
     if @post.save
       render json: @post, status: 200

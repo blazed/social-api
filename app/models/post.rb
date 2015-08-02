@@ -11,6 +11,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  open_graph_cache_id :integer
+#  from_user_id        :uuid
 #
 # Indexes
 #
@@ -19,6 +20,7 @@
 
 class Post < ActiveRecord::Base
   belongs_to :user
+  belongs_to :from, class_name: 'User', foreign_key: 'from_user_id'
   belongs_to :open_graph_cache
 
   validates :text, presence: true
@@ -27,9 +29,7 @@ class Post < ActiveRecord::Base
 
   after_commit :queue_gather_op_data, on: :create, if: :contains_open_graph_url_in_text?
 
-  #after_create :push_post
-  #after_create :update_pusher!
-  #after_destroy :update_pusher!
+  after_create :push_new_post
 
   def raw_text
     read_attribute(:text)
@@ -47,8 +47,8 @@ class Post < ActiveRecord::Base
     self.open_graph_url = self.urls[0]
   end
 
-  def push_post
-    Pusher.trigger('posts', 'push', PostSerializer.new(self).to_json)
+  def push_new_post
+    Pusher.trigger("posts-#{self.user_id}", 'new-post', PostSerializer.new(self).to_json)
   end
 
   #def send_push_notification

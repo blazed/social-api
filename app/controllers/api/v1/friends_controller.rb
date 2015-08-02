@@ -1,5 +1,5 @@
 class Api::V1::FriendsController < ApplicationController
-  before_action :doorkeeper_authorize!
+  before_action :authenticate_user!
 
   def create
     @user = User.find(params[:user_id])

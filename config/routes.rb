@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   mount PgHero::Engine, at: "pghero"
   mount Sidekiq::Web, at: "/sidekiq"
 
-  devise_for :users, controllers: { sessions: 'sessions' }, skip: [:passwords]
+  scope '/api/v1', as: nil do
+    devise_for :users, controllers: { sessions: 'sessions', registrations: 'registrations' }, skip: [:passwords]
+  end
 
   namespace :api do
     namespace :v1 do
