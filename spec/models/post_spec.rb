@@ -23,6 +23,14 @@ require 'rails_helper'
 RSpec.describe Post, type: :model do
   include ActiveJob::TestHelper
 
+  before :all do
+    WebMock.disable_net_connect! allow_localhost: true
+  end
+
+  after :all do
+    WebMock.disable_net_connect!
+  end
+
   describe 'associtations' do
     it { should belong_to :user }
     it { should belong_to :open_graph_cache }
@@ -35,10 +43,10 @@ RSpec.describe Post, type: :model do
     end
 
     it 'should queue GatherOpenGraphDataJob if links is included' do
-      Fabricate.build(:post, text: @post_text)
+      post = Fabricate.build(:post, text: @post_text)
       #expect(GatherOpenGraphDataJob).to receive(:perform_later).with(instance_of(Fixnum), instance_of(String))
       GatherOpenGraphDataJob.new.expects(:perform_later).with(instance_of(Fixnum), instance_of(String))
-      #post.save
+      post.save
     end
 
     describe '#contains_open_graph_url_in_text?' do

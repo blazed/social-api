@@ -6,5 +6,8 @@ elsif Rails.env.development?
   Pusher.logger = Rails.logger
 
 else
+  Pusher.app_id = "social"
+  Pusher.key = "key"
+  Pusher.secret = "Mysecret"
   require 'pusher-fake/support/base'
 end

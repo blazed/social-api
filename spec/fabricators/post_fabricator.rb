@@ -22,4 +22,5 @@ Fabricator(:post) do
   text { Faker::Lorem.sentences }
 
   user(fabricator: :user)
+  from(fabricator: :user)
 end

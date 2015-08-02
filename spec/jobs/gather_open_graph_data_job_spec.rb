@@ -4,6 +4,14 @@ RSpec.describe GatherOpenGraphDataJob, type: :job do
   include ActiveJob::TestHelper
   let(:post) { Fabricate(:post) }
 
+  before :all do
+    WebMock.disable_net_connect! allow_localhost: true
+  end
+
+  after :all do
+    WebMock.disable_net_connect!
+  end
+
   before do
     @ogsite_title = 'Homepage'
     @ogsite_type = 'website'
