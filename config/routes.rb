@@ -30,6 +30,10 @@ Rails.application.routes.draw do
   end
 
   get 'password_reset' => 'application#index', as: :edit_user_password
+
+  root to: 'application#index'
+  # Catch-all Ember
+  get '*path' => 'application#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

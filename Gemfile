@@ -49,6 +49,13 @@ group :development do
   #gem 'letter_opener'
   gem 'pry-rails'
   gem 'guard-rspec', require: false
+
+  # Deployment stuff
+  gem 'capistrano', '~> 3.4'
+  gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-bundler'
+  gem 'capistrano-sidekiq'
+  gem 'capistrano-pumaio', require: false
 end
 
 group :development, :test do
@@ -74,3 +81,5 @@ group :test do
   gem 'simplecov', require: false
 end
 
+
+gem 'puma'

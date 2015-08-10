@@ -4,6 +4,13 @@ class ApplicationController < ActionController::API
   #include ActionController::ImplicitRender
   before_action :authenticate_user_from_token!
 
+  def index
+    params[:revision] ||= 'current'
+    html = $redis.get("social:#{params[:revision]}")
+    html2 = $redis.get(html) # TODO: This looks so wrong!
+    render text: html2
+  end
+
   private
 
   def authenticate_user_from_token!
